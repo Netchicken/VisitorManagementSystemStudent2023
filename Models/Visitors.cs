@@ -8,10 +8,10 @@
         public string Business { get; set; }
         public DateTime DateIn { get; set; }
         public DateTime DateOut { get; set; }
-        public Guid StaffNameId { get; set; }
+        public Guid StaffNamesId { get; set; }
 
         //join
-        public StaffNames StaffName { get; set; }
+        public StaffNames StaffNames { get; set; }
 
     }
 }

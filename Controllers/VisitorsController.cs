@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-
 using VisitorManagementSystem.Data;
 using VisitorManagementSystem.Models;
 
@@ -19,7 +22,7 @@ namespace VisitorManagementSystem.Controllers
         // GET: Visitors
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Visitors.Include(v => v.StaffName);
+            var applicationDbContext = _context.Visitors.Include(v => v.StaffNames);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -32,7 +35,7 @@ namespace VisitorManagementSystem.Controllers
             }
 
             var visitors = await _context.Visitors
-                .Include(v => v.StaffName)
+                .Include(v => v.StaffNames)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (visitors == null)
             {
@@ -45,7 +48,7 @@ namespace VisitorManagementSystem.Controllers
         // GET: Visitors/Create
         public IActionResult Create()
         {
-            ViewData["StaffNameId"] = new SelectList(_context.Set<StaffNames>(), "Id", "Id");
+            ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Id");
             return View();
         }
 
@@ -54,17 +57,16 @@ namespace VisitorManagementSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Business,DateIn,DateOut,StaffNameId")] Visitors visitors)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Business,DateIn,DateOut,StaffNamesId")] Visitors visitors)
         {
             if (ModelState.IsValid)
             {
                 visitors.Id = Guid.NewGuid();
-                visitors.DateIn = DateTime.Now;
                 _context.Add(visitors);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StaffNameId"] = new SelectList(_context.Set<StaffNames>(), "Id", "Id", visitors.StaffNameId);
+            ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Id", visitors.StaffNamesId);
             return View(visitors);
         }
 
@@ -81,7 +83,7 @@ namespace VisitorManagementSystem.Controllers
             {
                 return NotFound();
             }
-            ViewData["StaffNameId"] = new SelectList(_context.Set<StaffNames>(), "Id", "Id", visitors.StaffNameId);
+            ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Id", visitors.StaffNamesId);
             return View(visitors);
         }
 
@@ -90,7 +92,7 @@ namespace VisitorManagementSystem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FirstName,LastName,Business,DateIn,DateOut,StaffNameId")] Visitors visitors)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,FirstName,LastName,Business,DateIn,DateOut,StaffNamesId")] Visitors visitors)
         {
             if (id != visitors.Id)
             {
@@ -117,7 +119,7 @@ namespace VisitorManagementSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StaffNameId"] = new SelectList(_context.Set<StaffNames>(), "Id", "Id", visitors.StaffNameId);
+            ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Id", visitors.StaffNamesId);
             return View(visitors);
         }
 
@@ -130,7 +132,7 @@ namespace VisitorManagementSystem.Controllers
             }
 
             var visitors = await _context.Visitors
-                .Include(v => v.StaffName)
+                .Include(v => v.StaffNames)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (visitors == null)
             {
@@ -154,14 +156,14 @@ namespace VisitorManagementSystem.Controllers
             {
                 _context.Visitors.Remove(visitors);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool VisitorsExists(Guid id)
         {
-            return (_context.Visitors?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Visitors?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

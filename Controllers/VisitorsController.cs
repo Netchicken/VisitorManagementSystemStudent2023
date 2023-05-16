@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
 using VisitorManagementSystem.Data;
 using VisitorManagementSystem.Models;
 
@@ -48,7 +46,7 @@ namespace VisitorManagementSystem.Controllers
         // GET: Visitors/Create
         public IActionResult Create()
         {
-            ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Id");
+            ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Name");
             return View();
         }
 
@@ -62,11 +60,22 @@ namespace VisitorManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 visitors.Id = Guid.NewGuid();
+
                 _context.Add(visitors);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Id", visitors.StaffNamesId);
+
+            if (!ModelState.IsValid)
+            {
+                var errors =
+                    from value in ModelState.Values
+                    where value.ValidationState == ModelValidationState.Invalid
+                    select value;
+                return View();  // <-- I set a breakpoint here, and examine "errors"
+            }
+
+            ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Name", visitors.StaffNamesId);
             return View(visitors);
         }
 
@@ -156,14 +165,14 @@ namespace VisitorManagementSystem.Controllers
             {
                 _context.Visitors.Remove(visitors);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool VisitorsExists(Guid id)
         {
-          return (_context.Visitors?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Visitors?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

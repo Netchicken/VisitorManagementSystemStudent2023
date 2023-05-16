@@ -10,8 +10,8 @@
         public DateTime DateOut { get; set; }
         public Guid StaffNamesId { get; set; }
 
-        //join
-        public StaffNames StaffNames { get; set; }
+        // Reference navigation
+        public StaffNames? StaffNames { get; set; }
 
     }
 }

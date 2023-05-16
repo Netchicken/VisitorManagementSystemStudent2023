@@ -47,7 +47,12 @@ namespace VisitorManagementSystem.Controllers
         public IActionResult Create()
         {
             ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Name");
-            return View();
+
+            Visitors visitors = new Visitors();
+            visitors.DateIn = DateTime.Now;
+            visitors.DateOut = DateTime.Now;
+
+            return View(visitors);
         }
 
         // POST: Visitors/Create

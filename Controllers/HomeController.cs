@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using System.Diagnostics;
+using System.Text;
 
 using VisitorManagementSystem.Models;
 
@@ -26,7 +27,7 @@ namespace VisitorManagementSystem.Controllers
 
             FileInfo filePath = new FileInfo(Path.Combine(rootPath, ("CFA.txt")));
 
-            string[] lines = System.IO.File.ReadAllLines(filePath.ToString());
+            string[] lines = System.IO.File.ReadAllLines(filePath.ToString(), Encoding.UTF8);
 
             ViewData["Conditions"] = lines;
 

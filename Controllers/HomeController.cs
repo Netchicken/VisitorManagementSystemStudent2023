@@ -8,15 +8,27 @@ namespace VisitorManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        //constructor
+        public HomeController(IWebHostEnvironment _webHostEnvironment, ILogger<HomeController> logger)
         {
+            webHostEnvironment = _webHostEnvironment;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
+            ViewData["Welcome"] = "Oh No not you Again";
+
+            string rootPath = webHostEnvironment.WebRootPath;
+
+            FileInfo filePath = new FileInfo(Path.Combine(rootPath, ("CFA.txt")));
+
+            string[] lines = System.IO.File.ReadAllLines(filePath.ToString());
+
+            ViewData["Conditions"] = lines;
 
             return View();
         }

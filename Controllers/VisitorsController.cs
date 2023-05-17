@@ -20,6 +20,16 @@ namespace VisitorManagementSystem.Controllers
         // GET: Visitors
         public async Task<IActionResult> Index()
         {
+            ViewBag.Welcome = "Welcome to the Visitor Management System";
+            ViewBag.TodayDate = DateTime.Now.ToString("dddd, dd MMMM yyyy");
+            ViewBag.NewVisitor = new Visitors()
+            {
+                FirstName = "Howard",
+                LastName = "Hughes",
+            };
+
+
+
             var applicationDbContext = _context.Visitors.Include(v => v.StaffNames);
             return View(await applicationDbContext.ToListAsync());
         }

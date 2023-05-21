@@ -2,35 +2,13 @@
     ViewData["Title"] = "This is the main page";
 }
 
+
 <div class="row">
+    
+   
     <h1 class="display-4">Welcome</h1>
     <h4>@ViewData["Welcome"]</h4>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-
-    @foreach (var item in (IEnumerable<string>)ViewData["Conditions"])
-    {
-
-        if (item.ToString().Contains("Heading"))
-        {
-            <div class="card bg-light" style="margin-top:20px; text-align:center">
-                <div class="card-body">
-                    <h3>@item.ToString().Replace("Heading", "")</h3>
-                </div>
-            </div>
-        }
-        else if (item.ToString().Contains("FINALRULE"))
-         { <h5 style="text-align: center">@item.ToString().Replace("FINALRULE", "")</h5>}
-    else
-    {
-        <div class="form-group col-md-3" >@item.ToString()</div>
-    }
-
-}
-
-
-
-
-
-
-
 </div>
+
+@await Html.PartialAsync("_Conditions") 

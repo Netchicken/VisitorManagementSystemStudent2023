@@ -15,7 +15,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
-
+//adding in automapper
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddSingleton<ITextFileOperations, TextFileOperations>();
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();

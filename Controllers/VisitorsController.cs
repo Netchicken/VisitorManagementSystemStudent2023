@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 using VisitorManagementSystem.Data;
 using VisitorManagementSystem.Models;
+using VisitorManagementSystem.ViewModels;
 
 namespace VisitorManagementSystem.Controllers
 {
@@ -58,7 +59,7 @@ namespace VisitorManagementSystem.Controllers
         {
             ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Name");
 
-            Visitors visitors = new Visitors();
+            VisitorsVM visitors = new VisitorsVM();
             visitors.DateIn = DateTime.Now;
             visitors.DateOut = DateTime.Now;
 
@@ -103,6 +104,10 @@ namespace VisitorManagementSystem.Controllers
             }
 
             var visitors = await _context.Visitors.FindAsync(id);
+
+            VisitorsVM visitorsVM = new VisitorsVM();
+
+
             if (visitors == null)
             {
                 return NotFound();

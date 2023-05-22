@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using VisitorManagementSystem.Data;
 using VisitorManagementSystem.Models;
 
@@ -22,9 +18,9 @@ namespace VisitorManagementSystem.Controllers
         // GET: StaffNames
         public async Task<IActionResult> Index()
         {
-              return _context.StaffNames != null ? 
-                          View(await _context.StaffNames.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.StaffNames'  is null.");
+            return _context.StaffNames != null ?
+                        View(await _context.StaffNames.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.StaffNames'  is null.");
         }
 
         // GET: StaffNames/Details/5
@@ -151,14 +147,14 @@ namespace VisitorManagementSystem.Controllers
             {
                 _context.StaffNames.Remove(staffNames);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool StaffNamesExists(Guid id)
         {
-          return (_context.StaffNames?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.StaffNames?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

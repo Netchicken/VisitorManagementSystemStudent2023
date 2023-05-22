@@ -12,11 +12,13 @@ namespace VisitorManagementSystem.Controllers
 
         private readonly ILogger<HomeController> _logger;
 
-        public ITextFileOperations _textFileOperations { get; }
+        public IDataSeeder _dataSeeder { get; }
+        private ITextFileOperations _textFileOperations { get; }
 
         //constructor
-        public HomeController(ITextFileOperations textFileOperations, ILogger<HomeController> logger)
+        public HomeController(IDataSeeder dataSeeder, ITextFileOperations textFileOperations, ILogger<HomeController> logger)
         {
+            _dataSeeder = dataSeeder;
             _textFileOperations = textFileOperations;
             _logger = logger;
         }
@@ -24,10 +26,18 @@ namespace VisitorManagementSystem.Controllers
         public IActionResult Index()
         {
 
+            //run the dataseeder
+            _dataSeeder.SeedAsync().Wait();
 
-
-            ViewData["Welcome"] = "Oh No not you Again";
-
+            if (!string.IsNullOrEmpty(User.Identity.Name))
+            {
+                int placeholder = User.Identity.Name.IndexOf("@");
+                ViewData["Welcome"] = "Oh No not you Again - " + User.Identity.Name.Substring(0, placeholder);
+            }
+            else
+            {
+                ViewData["Welcome"] = "Hello sucker";
+            }
 
 
             ViewData["Conditions"] = _textFileOperations.LoadConditionsForAcceptanceText();
@@ -37,7 +47,6 @@ namespace VisitorManagementSystem.Controllers
 
         public IActionResult Privacy()
         {
-
             return View();
         }
 

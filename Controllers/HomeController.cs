@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 using System.Diagnostics;
 
+using VisitorManagementSystem.Data;
 using VisitorManagementSystem.Models;
 using VisitorManagementSystem.Services;
+using VisitorManagementSystem.ViewModels;
 
 namespace VisitorManagementSystem.Controllers
 {
@@ -12,18 +17,22 @@ namespace VisitorManagementSystem.Controllers
 
         private readonly ILogger<HomeController> _logger;
 
+        public IMapper _mapper { get; }
+        public ApplicationDbContext _context { get; }
         public IDataSeeder _dataSeeder { get; }
         private ITextFileOperations _textFileOperations { get; }
 
         //constructor
-        public HomeController(IDataSeeder dataSeeder, ITextFileOperations textFileOperations, ILogger<HomeController> logger)
+        public HomeController(IMapper mapper, ApplicationDbContext context, IDataSeeder dataSeeder, ITextFileOperations textFileOperations, ILogger<HomeController> logger)
         {
+            _mapper = mapper;
+            _context = context;
             _dataSeeder = dataSeeder;
             _textFileOperations = textFileOperations;
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
 
             //run the dataseeder
@@ -42,7 +51,19 @@ namespace VisitorManagementSystem.Controllers
 
             ViewData["Conditions"] = _textFileOperations.LoadConditionsForAcceptanceText();
 
-            return View();
+            var visitors = await _context.Visitors.Include(v => v.StaffNames).ToListAsync();
+            var visitorsVM = _mapper.Map<IEnumerable<VisitorsVM>>(visitors);
+
+
+            foreach (var v in visitorsVM)
+            {
+                v.FullName = v.FirstName + " " + v.LastName;
+            }
+
+
+            return View(visitorsVM);
+
+            //   return View();
         }
 
         public IActionResult Privacy()

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<VisitorManagementSystem.Models.Visitors>
+﻿@model IEnumerable<VisitorManagementSystem.ViewModels.VisitorsVM>
 
 @{
     ViewData["Title"] = "Index";
@@ -31,6 +31,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.StaffNames)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -54,6 +57,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StaffNames.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

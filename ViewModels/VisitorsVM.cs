@@ -20,7 +20,16 @@ namespace VisitorManagementSystem.ViewModels
         [Display(Name = "Staff Person Visited")]
         // Reference navigation
         public StaffNamesVM? StaffNames { get; set; }
+        [Display(Name = "Visitor Full Name")]
+        public string? FullName { get; set; }
+
+
+        public VisitorsVM()
+        {
+            FullName = FirstName + " " + LastName;
+        }
 
 
     }
+
 }

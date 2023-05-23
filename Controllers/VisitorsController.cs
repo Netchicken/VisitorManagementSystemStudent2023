@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +15,12 @@ namespace VisitorManagementSystem.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public VisitorsController(ApplicationDbContext context)
+        public IMapper _mapper { get; }
+
+        public VisitorsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: Visitors
@@ -29,10 +34,17 @@ namespace VisitorManagementSystem.Controllers
                 LastName = "Hughes",
             };
 
+            var visitors = await _context.Visitors.Include(v => v.StaffNames).ToListAsync();
+            var visitorsVM = _mapper.Map<IEnumerable<VisitorsVM>>(visitors);
 
 
-            var applicationDbContext = _context.Visitors.Include(v => v.StaffNames);
-            return View(await applicationDbContext.ToListAsync());
+            foreach (var v in visitorsVM)
+            {
+                v.FullName = v.FirstName + " " + v.LastName;
+            }
+
+
+            return View(visitorsVM);
         }
 
         // GET: Visitors/Details/5
@@ -51,7 +63,10 @@ namespace VisitorManagementSystem.Controllers
                 return NotFound();
             }
 
-            return View(visitors);
+            var visitorsVM = _mapper.Map<VisitorsVM>(visitors);
+
+            visitorsVM.FullName = visitorsVM.FirstName + " " + visitorsVM.LastName;
+            return View(visitorsVM);
         }
 
         // GET: Visitors/Create

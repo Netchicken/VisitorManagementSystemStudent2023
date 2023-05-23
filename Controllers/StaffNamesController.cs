@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using VisitorManagementSystem.Data;
@@ -10,14 +12,22 @@ namespace VisitorManagementSystem.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public StaffNamesController(ApplicationDbContext context)
+        public IMapper _mapper { get; }
+
+        public StaffNamesController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: StaffNames
         public async Task<IActionResult> Index()
         {
+            var staffnames = await _context.StaffNames.ToListAsync();
+
+            var staffnamesVM = _m
+
+
             return _context.StaffNames != null ?
                         View(await _context.StaffNames.ToListAsync()) :
                         Problem("Entity set 'ApplicationDbContext.StaffNames'  is null.");

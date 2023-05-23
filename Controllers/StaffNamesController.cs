@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 using VisitorManagementSystem.Data;
 using VisitorManagementSystem.Models;
+using VisitorManagementSystem.ViewModels;
 
 namespace VisitorManagementSystem.Controllers
 {
@@ -25,12 +26,13 @@ namespace VisitorManagementSystem.Controllers
         {
             var staffnames = await _context.StaffNames.ToListAsync();
 
-            var staffnamesVM = _m
+            var staffnamesVM = _mapper.Map<IEnumerable<StaffNamesVM>>(staffnames);
 
+            return View(staffnamesVM);
 
-            return _context.StaffNames != null ?
-                        View(await _context.StaffNames.ToListAsync()) :
-                        Problem("Entity set 'ApplicationDbContext.StaffNames'  is null.");
+            //return _context.StaffNames != null ?
+            //            View(await _context.StaffNames.ToListAsync()) :
+            //            Problem("Entity set 'ApplicationDbContext.StaffNames'  is null.");
         }
 
         // GET: StaffNames/Details/5

@@ -6,6 +6,10 @@
 
 <div class="row">
 
+    @if (TempData["noti"] != null)
+    {
+      @Html.Raw(TempData["noti"])
+    }
 
     <h1 class="display-4">Welcome</h1>
     <h4>@ViewData["Welcome"]</h4>

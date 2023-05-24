@@ -20,6 +20,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddSingleton<ITextFileOperations, TextFileOperations>();
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
+builder.Services.AddTransient<ISweetAlert, SweetAlert>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

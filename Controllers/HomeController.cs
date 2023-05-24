@@ -21,20 +21,21 @@ namespace VisitorManagementSystem.Controllers
         public ApplicationDbContext _context { get; }
         public IDataSeeder _dataSeeder { get; }
         private ITextFileOperations _textFileOperations { get; }
+        public ISweetAlert _sweetAlert { get; }
 
         //constructor
-        public HomeController(IMapper mapper, ApplicationDbContext context, IDataSeeder dataSeeder, ITextFileOperations textFileOperations, ILogger<HomeController> logger)
+        public HomeController(IMapper mapper, ApplicationDbContext context, IDataSeeder dataSeeder, ITextFileOperations textFileOperations, ILogger<HomeController> logger, ISweetAlert sweetAlert)
         {
             _mapper = mapper;
             _context = context;
             _dataSeeder = dataSeeder;
             _textFileOperations = textFileOperations;
             _logger = logger;
+            _sweetAlert = sweetAlert;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
-
             //run the dataseeder
             _dataSeeder.SeedAsync().Wait();
 
@@ -59,6 +60,7 @@ namespace VisitorManagementSystem.Controllers
             {
                 v.FullName = v.FirstName + " " + v.LastName;
             }
+            TempData["noti"] = _sweetAlert.AlertPopupWithImage("The Awesome VMS", "Automate and record visitors to your organization", Enum.SweetAlertEnum.NotificationType.success);
 
 
             return View(visitorsVM);

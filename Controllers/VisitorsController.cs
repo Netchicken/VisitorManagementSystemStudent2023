@@ -76,7 +76,12 @@ namespace VisitorManagementSystem.Controllers
 
             VisitorsVM visitors = new VisitorsVM();
             visitors.DateIn = DateTime.Now;
-            visitors.DateOut = DateTime.Now;
+
+            if (visitors.DateOut == null)
+            {
+                visitors.DateOut = DateTime.Parse("1/1/0001");
+            }
+
 
             return View(visitors);
         }
@@ -91,6 +96,12 @@ namespace VisitorManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 visitors.Id = Guid.NewGuid();
+
+                if (visitors.DateOut == null)
+                {
+                    visitors.DateOut = DateTime.Parse("1/1/0001");
+                }
+
 
                 _context.Add(visitors);
                 await _context.SaveChangesAsync();

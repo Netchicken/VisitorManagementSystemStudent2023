@@ -1,0 +1,50 @@
+﻿@model IEnumerable<VisitorManagementSystem.ViewModels.VisitorsVM>
+
+    @{
+        ViewData["Title"] = "Index";
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FullName)
+                </th>
+                              <th>
+                    @Html.DisplayNameFor(model => model.Business)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateIn)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.DateOut)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.StaffNames)
+                </th>
+                           </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                            <td>
+                        @Html.DisplayFor(modelItem => item.Business)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateIn)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.DateOut)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StaffNames.Name)
+                    </td>
+                                       
+                </tr>
+            }
+        </tbody>
+    </table>

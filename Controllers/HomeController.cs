@@ -46,13 +46,16 @@ namespace VisitorManagementSystem.Controllers
             }
             else
             {
-                ViewData["Welcome"] = "Hello sucker";
+                // ViewData["Welcome"] = "Hello sucker";
             }
 
 
             ViewData["Conditions"] = _textFileOperations.LoadConditionsForAcceptanceText();
 
-            var visitors = await _context.Visitors.Include(v => v.StaffNames).ToListAsync();
+            //.Where(v => v.DateOut == null)
+            var date = DateTime.Parse("1/1/0001");
+            var visitors = await _context.Visitors.Where(v => v.DateOut == date).Include(v => v.StaffNames).ToListAsync();
+
             var visitorsVM = _mapper.Map<IEnumerable<VisitorsVM>>(visitors);
 
 

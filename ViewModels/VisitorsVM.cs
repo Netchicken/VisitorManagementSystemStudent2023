@@ -14,13 +14,13 @@ namespace VisitorManagementSystem.ViewModels
         [Display(Name = "Date Arrived")]
         public DateTime DateIn { get; set; }
         [Display(Name = "Date Left")]
-        public DateTime DateOut { get; set; }
+        public DateTime? DateOut { get; set; }
 
         public Guid StaffNamesId { get; set; }
         [Display(Name = "Staff Person Visited")]
         // Reference navigation
         public StaffNamesVM? StaffNames { get; set; }
-        [Display(Name = "Visitor Full Name")]
+        [Display(Name = "Visitor")]
         public string? FullName { get; set; }
 
 

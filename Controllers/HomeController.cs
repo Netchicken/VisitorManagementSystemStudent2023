@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 using System.Diagnostics;
 
@@ -17,14 +16,15 @@ namespace VisitorManagementSystem.Controllers
 
         private readonly ILogger<HomeController> _logger;
 
-        public IMapper _mapper { get; }
-        public ApplicationDbContext _context { get; }
-        public IDataSeeder _dataSeeder { get; }
+        private IMapper _mapper { get; }
+        private ApplicationDbContext _context { get; }
+        private IDataSeeder _dataSeeder { get; }
         private ITextFileOperations _textFileOperations { get; }
-        public ISweetAlert _sweetAlert { get; }
+        private ISweetAlert _sweetAlert { get; }
+        private IDBCalls _dBCalls { get; }
 
         //constructor
-        public HomeController(IMapper mapper, ApplicationDbContext context, IDataSeeder dataSeeder, ITextFileOperations textFileOperations, ILogger<HomeController> logger, ISweetAlert sweetAlert)
+        public HomeController(IMapper mapper, ApplicationDbContext context, IDataSeeder dataSeeder, ITextFileOperations textFileOperations, ILogger<HomeController> logger, ISweetAlert sweetAlert, IDBCalls dBCalls)
         {
             _mapper = mapper;
             _context = context;
@@ -32,6 +32,7 @@ namespace VisitorManagementSystem.Controllers
             _textFileOperations = textFileOperations;
             _logger = logger;
             _sweetAlert = sweetAlert;
+            _dBCalls = dBCalls;
         }
 
         public async Task<IActionResult> IndexAsync()
@@ -49,12 +50,11 @@ namespace VisitorManagementSystem.Controllers
                 // ViewData["Welcome"] = "Hello sucker";
             }
 
-
             ViewData["Conditions"] = _textFileOperations.LoadConditionsForAcceptanceText();
 
             //.Where(v => v.DateOut == null)
             var date = DateTime.Parse("1/1/0001");
-            var visitors = await _context.Visitors.Where(v => v.DateOut == date).Include(v => v.StaffNames).ToListAsync();
+            var visitors = await _dBCalls.VisitorsLoggedInAsync();
 
             var visitorsVM = _mapper.Map<IEnumerable<VisitorsVM>>(visitors);
 
@@ -63,13 +63,40 @@ namespace VisitorManagementSystem.Controllers
             {
                 v.FullName = v.FirstName + " " + v.LastName;
             }
-            TempData["noti"] = _sweetAlert.AlertPopupWithImage("The Awesome VMS", "Automate and record visitors to your organization", Enum.SweetAlertEnum.NotificationType.success);
+            //   TempData["noti"] = _sweetAlert.AlertPopupWithImage("The Awesome VMS", "Automate and record visitors to your organization", Enum.SweetAlertEnum.NotificationType.success);
 
 
             return View(visitorsVM);
 
             //   return View();
         }
+
+
+
+        [Route("/Home/Logout", Name = "LogoutRoute")]
+        public async Task<IActionResult> LogOut(Guid? id)
+        {
+            if (id == null || _context.Visitors == null)
+            {
+                return NotFound();
+            }
+
+            var visitors = await _context.Visitors.FindAsync(id);
+
+            if (visitors == null)
+            {
+                return NotFound();
+            }
+            //all we do is update the date out
+            visitors.DateOut = DateTime.Now;
+
+            _context.Update(visitors);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
 
         public IActionResult Privacy()
         {

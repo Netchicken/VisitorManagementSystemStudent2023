@@ -22,6 +22,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.StaffNames)
                 </th>
+                <th>Log Out</th>
                            </tr>
         </thead>
         <tbody>
@@ -43,7 +44,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.StaffNames.Name)
                     </td>
-                                       
+                    <td>
+                        <a asp-route="LogoutRoute" asp-route-id="@item.Id" class="btn btn-primary" type="button">Logout</a>
+                    </td>                 
                 </tr>
             }
         </tbody>

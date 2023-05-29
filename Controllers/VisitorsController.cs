@@ -105,7 +105,8 @@ namespace VisitorManagementSystem.Controllers
 
                 _context.Add(visitors);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //  return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
 
             if (!ModelState.IsValid)
@@ -118,7 +119,8 @@ namespace VisitorManagementSystem.Controllers
             }
 
             ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Name", visitors.StaffNamesId);
-            return View(visitors);
+            // return View(visitors);
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Visitors/Edit/5

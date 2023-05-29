@@ -8,12 +8,12 @@
 
     @if (TempData["noti"] != null)
     {
-      @Html.Raw(TempData["noti"])
+        @Html.Raw(TempData["noti"])
     }
 
     <h1 class="display-4">Welcome</h1>
     <h4>@ViewData["Welcome"]</h4>
-   
+    <a asp-controller="Visitors" asp-action="Create"   class="btn btn-outline-success" type="button">Sign In</a>
 </div>
 
 @await Html.PartialAsync("_Visitors")

@@ -51,24 +51,16 @@ namespace VisitorManagementSystem.Controllers
             }
 
             ViewData["Conditions"] = _textFileOperations.LoadConditionsForAcceptanceText();
+            //   TempData["noti"] = _sweetAlert.AlertPopupWithImage("The Awesome VMS", "Automate and record visitors to your organization", Enum.SweetAlertEnum.NotificationType.success);
 
-            //.Where(v => v.DateOut == null)
-            var date = DateTime.Parse("1/1/0001");
+
             var visitors = await _dBCalls.VisitorsLoggedInAsync();
-
             var visitorsVM = _mapper.Map<IEnumerable<VisitorsVM>>(visitors);
-
-
             foreach (var v in visitorsVM)
             {
                 v.FullName = v.FirstName + " " + v.LastName;
             }
-            //   TempData["noti"] = _sweetAlert.AlertPopupWithImage("The Awesome VMS", "Automate and record visitors to your organization", Enum.SweetAlertEnum.NotificationType.success);
-
-
             return View(visitorsVM);
-
-            //   return View();
         }
 
 

@@ -73,7 +73,6 @@ namespace VisitorManagementSystem.Controllers
         public IActionResult Create()
         {
             ViewData["StaffNamesId"] = new SelectList(_context.StaffNames, "Id", "Name");
-
             VisitorsVM visitors = new VisitorsVM();
             visitors.DateIn = DateTime.Now;
 
@@ -81,8 +80,6 @@ namespace VisitorManagementSystem.Controllers
             {
                 visitors.DateOut = DateTime.Parse("1/1/0001");
             }
-
-
             return View(visitors);
         }
 
@@ -101,7 +98,6 @@ namespace VisitorManagementSystem.Controllers
                 {
                     visitors.DateOut = DateTime.Parse("1/1/0001");
                 }
-
 
                 _context.Add(visitors);
                 await _context.SaveChangesAsync();
@@ -132,9 +128,7 @@ namespace VisitorManagementSystem.Controllers
             }
 
             var visitors = await _context.Visitors.FindAsync(id);
-
             VisitorsVM visitorsVM = new VisitorsVM();
-
 
             if (visitors == null)
             {

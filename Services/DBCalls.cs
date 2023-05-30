@@ -39,10 +39,8 @@ namespace VisitorManagementSystem.Services
 
         public async Task<IEnumerable<Visitors>> VisitorsLoggedInAsync()
         {
-
             var date = DateTime.Parse("1/1/0001");
             var visitors = await _context.Visitors.Where(v => v.DateOut == date).Include(q => q.StaffNames).ToListAsync();
-
             return visitors;
         }
 
